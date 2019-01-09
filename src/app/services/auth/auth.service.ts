@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, pipe } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { User } from './user';
 
 
@@ -13,6 +14,15 @@ export class AuthService {
 
   signup(credentials: User): Observable<object> {
     return this.http.post('http://localhost:8080/api/users', credentials);
+  }
+
+  login(credentials: User): Observable<object> {
+    return this.http.post('http://localhost:8080/api/sessions', credentials).pipe(
+      map((res: any) => {
+        localStorage.setItem('Authorization', res.token);
+        return res;
+      })
+    );
   }
 
 }
