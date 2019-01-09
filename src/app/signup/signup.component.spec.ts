@@ -50,11 +50,18 @@ describe('SignupComponent', () => {
       }).compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(async(() => { // Add async here!
     fixture = TestBed.createComponent(SignupComponent);
     component = fixture.componentInstance;
+    signupPage = new SignupPage();
+    authService = fixture.debugElement.injector.get(AuthService);
+
     fixture.detectChanges();
-  });
+    return fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      signupPage.addPageElements();
+    });
+  })); // Add another paren here to close the async call
 
   it('should create', () => {
     expect(component).toBeTruthy();
