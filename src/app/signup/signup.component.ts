@@ -9,6 +9,17 @@ import { AuthService } from '../services/auth/auth.service';
 })
 export class SignupComponent implements OnInit {
   user: User = { 'username': '', password: '' };
+  dietPreferences = [
+    { name: 'BBQ', checked: false },
+    { name: 'Burger', checked: false },
+    { name: 'Chinese', checked: false },
+    { name: 'Deli', checked: false },
+    { name: 'Fast Food', checked: false },
+    { name: 'Italian', checked: false },
+    { name: 'Japanese', checked: false },
+    { name: 'Mexican', checked: false },
+    { name: 'Pizza', checked: false }
+  ];
 
   constructor(private authService: AuthService) { }
 
