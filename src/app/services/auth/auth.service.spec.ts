@@ -1,4 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
+import { of } from 'rxjs';
+
 import {
   HttpClientTestingModule,
   HttpTestingController
@@ -23,6 +25,7 @@ fdescribe('AuthService', () => {
   });
 
   describe('signup', () => {
+    // should return a user object with a valid username and password
     it('should return a token with a valid username and password', () => {
       const user = { 'username': 'myUser', 'password': 'password' };
       const signupResponse = {
@@ -32,15 +35,17 @@ fdescribe('AuthService', () => {
         '_id': '5a550ea739fbc4ca3ee0ce58',
         'dietPreferences': []
       };
-      //const loginResponse = { 'token': 's3cr3tt0ken' };
+      const loginResponse = { 'token': 's3cr3tt0ken' };
       let response;//
 
       authService.signup(user).subscribe(res => {
         response = res;
       });
+      spyOn(authService, 'login').and.callFake(() => of(loginResponse));
 
       http.expectOne('http://localhost:8080/api/users').flush(signupResponse);
-      expect(response).toEqual(signupResponse);
+      expect(response).toEqual(loginResponse);
+      expect(authService.login).toHaveBeenCalled();
       http.verify();
     });
 
