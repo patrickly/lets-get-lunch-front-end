@@ -2,20 +2,45 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignupModule } from './signup.module';
 import { SignupComponent } from './signup.component';
 import { AuthService } from '../services/auth/auth.service';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+
+class SignupPage {
+  submitBtn: DebugElement;
+  usernameInput: HTMLInputElement;
+  passwordInput: HTMLInputElement;
+  dietPreference: DebugElement[];
+  addPageElements() {
+    this.submitBtn = fixture.debugElement.query(By.css('button'));
+    this.usernameInput = fixture
+      .debugElement
+      .query(By.css('[name=username]'))
+      .nativeElement;
+    this.passwordInput = fixture
+      .debugElement
+      .query(By.css('[name=password]'))
+      .nativeElement;
+    this.dietPreference = fixture
+      .debugElement
+      .queryAll(By.css('[name=preference]'));
+  }
+}
+
 
 class MockAuthService {
   signup(credentials) { }
 }
 
-describe('SignupComponent', () => {
-  let component: SignupComponent;
-  let fixture: ComponentFixture<SignupComponent>;
+let component: SignupComponent;
+let fixture: ComponentFixture<SignupComponent>;
+let signupPage: SignupPage;
+let authService: AuthService;
 
+describe('SignupComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [SignupModule]
     })
-      // .compileComponents(); // Remove
       .overrideComponent(SignupComponent, {
         set: {
           providers: [
