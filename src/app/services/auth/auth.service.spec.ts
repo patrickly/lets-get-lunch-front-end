@@ -32,15 +32,15 @@ fdescribe('AuthService', () => {
         '_id': '5a550ea739fbc4ca3ee0ce58',
         'dietPreferences': []
       };
-      const loginResponse = { 'token': 's3cr3tt0ken' };
-      let response;
+      //const loginResponse = { 'token': 's3cr3tt0ken' };
+      let response;//
 
       authService.signup(user).subscribe(res => {
         response = res;
       });
 
       http.expectOne('http://localhost:8080/api/users').flush(signupResponse);
-      expect(response).toEqual(loginResponse);
+      expect(response).toEqual(signupResponse);
       http.verify();
     });
   });
