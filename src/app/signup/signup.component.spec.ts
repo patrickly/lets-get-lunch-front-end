@@ -4,6 +4,7 @@ import { SignupComponent } from './signup.component';
 import { AuthService } from '../services/auth/auth.service';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { of } from 'rxjs';
 
 class SignupPage {
   submitBtn: DebugElement;
@@ -66,4 +67,24 @@ describe('SignupComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should create a user with valid credentials and diet preferences', () => {
+    signupPage.usernameInput.value = 'johndoe';
+    signupPage.passwordInput.value = 'password';
+    signupPage.usernameInput.dispatchEvent(new Event('input'));
+    signupPage.passwordInput.dispatchEvent(new Event('input'));
+    signupPage.dietPreference[0].nativeElement.click();
+    signupPage.dietPreference[1].nativeElement.click();
+    spyOn(authService, 'signup').and.callFake(() => {
+      return of({ token: 's3cr3tt0ken' });
+    });
+    signupPage.submitBtn.nativeElement.click();
+    expect(authService.signup).toHaveBeenCalledWith({
+      username: 'johndoe',
+      password: 'password',
+      dietPreferences: ['BBQ', 'Burger']
+    });
+    // Add expectation to redirect to user dashboard
+  });
+
 });
