@@ -26,11 +26,31 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
   }
   signup(credentials) {
+    credentials.dietPreferences = this.getSelectedPreferences();
+    //console.log(JSON.stringify(credentials.dietPreferences));
+    //console.log("33434#" + JSON.stringify(credentials));
+
     this.authService.signup(credentials).subscribe(res => {
       console.log('res ', res);
       // Redirect to user dashboard
     });
   }
 
+  getSelectedPreferences() {
+    return this.dietPreferences
+      .filter((preference) => {
+        if (preference.checked === true) { return preference; }
+      })
+      .map((preference) => {
+        return preference.name;
+      });
+  }
 
+  onPrefCheck(index) {
+    if (this.dietPreferences[index].checked === true) {
+      this.dietPreferences[index].checked = false;
+    } else {
+      this.dietPreferences[index].checked = true;
+    }
+  }
 }
