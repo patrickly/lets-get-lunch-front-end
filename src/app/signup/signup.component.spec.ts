@@ -4,7 +4,7 @@ import { SignupComponent } from './signup.component';
 import { AuthService } from '../services/auth/auth.service';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 class SignupPage {
   submitBtn: DebugElement;
@@ -85,6 +85,25 @@ describe('SignupComponent', () => {
       dietPreferences: ['BBQ', 'Burger']
     });
     // Add expectation to redirect to user dashboard
+  });
+
+  it('should display an error message with invalid credentials', () => {
+    signupPage.usernameInput.value = 'janedoe';
+    signupPage.passwordInput.value = 'pswd';
+    signupPage.usernameInput.dispatchEvent(new Event('input'));
+    signupPage.passwordInput.dispatchEvent(new Event('input'));
+    spyOn(authService, 'signup').and.callFake(() => {
+      return throwError({
+        error: {
+          message: 'Your password must be at least 5 characters long.'
+        }
+      });
+    });
+    signupPage.submitBtn.nativeElement.click();
+    fixture.detectChanges();
+    const errorMessage: DebugElement = fixture.debugElement.query(By.css('.alert'));
+    expect(errorMessage.nativeElement.textContent)
+      .toEqual('Your password must be at least 5 characters long.');
   });
 
 });
