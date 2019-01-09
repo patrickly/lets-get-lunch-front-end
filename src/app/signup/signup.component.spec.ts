@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { SignupModule } from './signup.module';
 import { SignupComponent } from './signup.component';
+import { AuthService } from '../services/auth/auth.service';
+
+class MockAuthService {
+  signup(credentials) { }
+}
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
@@ -8,9 +13,16 @@ describe('SignupComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SignupComponent ]
+      imports: [SignupModule]
     })
-    .compileComponents();
+      // .compileComponents(); // Remove
+      .overrideComponent(SignupComponent, {
+        set: {
+          providers: [
+            { provide: AuthService, useClass: MockAuthService }
+          ]
+        }
+      }).compileComponents();
   }));
 
   beforeEach(() => {
