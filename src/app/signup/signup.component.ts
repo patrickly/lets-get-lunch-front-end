@@ -31,7 +31,8 @@ export class SignupComponent implements OnInit {
 
 
     this.authService.signup(credentials).subscribe(res => {
-      console.log('res ', res);
+      console.log("​SignupComponent -> signup -> res", res)
+      //console.log('res ', res);
       // Redirect to user dashboard
     }, err => {
       this.errorMessage = err.error.message;

@@ -58,4 +58,21 @@ fdescribe('AuthService', () => {
       http.verify();
     });
   });
+
+
+  describe('login', () => {
+    it('should return a token with a valid username and password', () => {
+      const user = { 'username': 'myUser', 'password': 'password' };
+      const loginResponse = { 'token': 's3cr3tt0ken' };
+      let response;
+      authService.login(user).subscribe(res => {
+        response = res;
+      });
+      http.expectOne('http://localhost:8080/api/sessions').flush(loginResponse);
+      expect(response).toEqual(loginResponse);
+      expect(localStorage.getItem('Authorization')).toEqual('s3cr3tt0ken');
+      http.verify();
+    });
+  });
+
 });
