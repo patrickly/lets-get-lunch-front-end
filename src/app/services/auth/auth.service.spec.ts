@@ -25,7 +25,6 @@ fdescribe('AuthService', () => {
   });
 
   describe('signup', () => {
-    // should return a user object with a valid username and password
     it('should return a token with a valid username and password', () => {
       const user = { 'username': 'myUser', 'password': 'password' };
       const signupResponse = {
